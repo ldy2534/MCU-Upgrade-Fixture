@@ -159,8 +159,8 @@ def get_firmware_md5():
 def download_firmware(url, checksum):
     retrys = 5
     while (retrys > 0):
-#        p = subprocess.Popen([PSCP_EXE, '-l', 'jason', '-pw', 'JASONliu11!', url, FW_FILE])
-        p = subprocess.Popen([PSCP_EXE, '-l', 'root', url, FW_FILE])
+        p = subprocess.Popen([PSCP_EXE, '-l', 'root', url, FW_FILE], stdin=PIPE)
+        p.stdin.write('y')
         p.communicate()
 
         md5 = hashlib.md5(open(FW_FILE, 'rb').read()).hexdigest()
