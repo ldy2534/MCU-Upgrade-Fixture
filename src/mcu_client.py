@@ -21,6 +21,7 @@ SERVER_IP_FILE = 'ip_address.txt'
 
 #command list
 usb_found_cmd = "{\"jsonrpc\":\"2.0\", \"method\":\"dut.connect\",\"params\":{\"dutId\":\"1234567\",\"testId\":\"0\"}}"
+usb_removed_cmd = "{\"jsonrpc\":\"2.0\", \"method\":\"dut.disconnect\",\"params\":{\"dutId\":\"1234567\",\"testId\":\"0\"}}"
 
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 #to do: when socket not availabe need to reconnect
@@ -97,7 +98,10 @@ def monitor_FET_device_task(arg1, stop_event, pause_event):
                         s.sendto(usb_found_cmd, addr)
                         last_state = 1
                 else:
-                    last_state = 0
+                    if (last_state == 1):
+                        print 'Send usb removed to server'
+                        s.sendto(usb_removed_cmd, addr)
+                        last_state = 0
 
             #time.sleep(1)
             stop_event.wait(1)
